@@ -47,7 +47,7 @@ static int pin_read( const Pin* pin )
         ret = IO_INL(pin->Protected.Port) & pin->Protected.Bit;
         break;
         default:
-        kassert(false);
+        kassert(0);
         break;
     }
 
@@ -67,7 +67,7 @@ static void pin_set(const Pin* pin)
         IO_SETL(pin->Protected.Port, pin->Protected.Bit);
         break;
         default:
-        kassert(false);
+        kassert(0);
         break;
     }
 }
@@ -85,7 +85,7 @@ static void pin_clear(const Pin* pin)
         IO_CLRL(pin->Protected.Port, pin->Protected.Bit);
         break;
         default:
-        kassert(false);
+        kassert(0);
         break;
     }
 }
@@ -112,7 +112,7 @@ static void pin_toggle( const Pin* pin )
         IO_TGLL(pin->Protected.Port, pin->Protected.Bit);
         break;
         default:
-        kassert(false);
+        kassert(0);
         break;
     }
 }

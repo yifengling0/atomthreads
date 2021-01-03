@@ -45,7 +45,7 @@ extern "C" {
   *   If expr is true, it returns no value.
   * @retval : None
   */
-  #define kassert(expr) ((expr) ? (void)0 : assert_failed((char*)__FILE__, __LINE__, ##expr))
+  #define kassert(expr) ((expr) ? (void)0 : assert_failed((char*)__FILE__, __LINE__, #expr))
 /* Exported functions ------------------------------------------------------- */
   void assert_failed(const char* file, int line, const char* msg);
 #else
