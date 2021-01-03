@@ -1,0 +1,14 @@
+{
+    "editor.snippetSuggestions": "bottom",
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "files.associations": {
+        "system_error": "c",
+        "xlocale": "c",
+        "cstring": "c",
+        "xlocinfo": "c",
+        "xstring": "c",
+        "xutility": "c",
+        "xtree": "c",
+        "vector": "cpp"
+    }
+}

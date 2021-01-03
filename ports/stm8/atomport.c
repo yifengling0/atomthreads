@@ -31,6 +31,8 @@
 #include "atom.h"
 #include "atomport-private.h"
 #include "stm8s_tim1.h"
+#include "uart.h"
+
 #if defined(__RCSTM8__)
 #include <intrins.h>
 #endif
@@ -242,7 +244,7 @@ void archInitSystemTickTimer ( void )
     TIM1_DeInit();
 
     /* Configure a 10ms tick */
-    TIM1_TimeBaseInit(10000, TIM1_COUNTERMODE_UP, 1, 0);
+    TIM1_TimeBaseInit(16,TIM1_COUNTERMODE_UP,10000,0);
 
     /* Generate an interrupt on timer count overflow */
     TIM1_ITConfig(TIM1_IT_UPDATE, ENABLE);
@@ -251,7 +253,6 @@ void archInitSystemTickTimer ( void )
     TIM1_Cmd(ENABLE);
 
 }
-
 
 /**
  *

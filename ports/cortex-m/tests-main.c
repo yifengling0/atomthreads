@@ -35,6 +35,9 @@
 #include "atomtests.h"
 #include "atomtimer.h"
 
+#include "console.h"
+#include "debug.h"
+#include "iosdrv.h"
 
 /* Constants */
 
@@ -49,7 +52,7 @@
  * In this case, the idle stack is allocated on the BSS via the
  * idle_thread_stack[] byte array.
  */
-#define IDLE_STACK_SIZE_BYTES       512
+#define IDLE_STACK_SIZE_BYTES       128
 
 
 /*
@@ -154,6 +157,10 @@ int main ( void )
         __asm__("nop");
     }
 
+    ConsoleInit();
+    DebugInit();
+    IosDrvInit();
+
     /**
      * Note: to protect OS structures and data during initialisation,
      * interrupts must remain disabled until the first thread
@@ -227,7 +234,7 @@ static void main_thread_func (uint32_t data __maybe_unused)
 
 
     /* Put a message out on the UART */
-    printf("Go\n");
+    printf("Go\r\n");
 
     /* Start test. All tests use the same start API. */
     test_status = test_start();
@@ -260,12 +267,14 @@ static void main_thread_func (uint32_t data __maybe_unused)
     /* Log final status */
     if (test_status == 0)
     {
-        printf("Pass\n");
+        printf("Pass\r\n");
     }
     else
     {
         printf("Fail(%lu)\n", test_status);
     }
+
+    ConsoleRun();
 
     /* Flash LED once per second if passed, very quickly if failed */
     sleep_ticks = (test_status == 0) ? SYSTEM_TICKS_PER_SEC : (SYSTEM_TICKS_PER_SEC/8);

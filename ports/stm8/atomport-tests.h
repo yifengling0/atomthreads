@@ -37,7 +37,7 @@
 #include <stdio.h>
 
 /* Logger macro for viewing test results */
-#define ATOMLOG     printf
+#define ATOMLOG     DebugPrint
 
 /*
  * String location macro: for platforms which need to place strings in

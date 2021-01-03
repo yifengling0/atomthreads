@@ -46,11 +46,12 @@ typedef void ( * TIMER_CB_FUNC ) ( POINTER cb_data ) ;
 typedef struct atom_timer
 {
     TIMER_CB_FUNC   cb_func;    /* Callback function */
-    POINTER	        cb_data;    /* Pointer to callback parameter/data */
-    uint32_t	    cb_ticks;   /* Ticks until callback */
+    POINTER         cb_data;    /* Pointer to callback parameter/data */
+    uint32_t        cb_ticks;   /* Ticks until callback */
 
-	/* Internal data */
-    struct atom_timer *next_timer;		/* Next timer in doubly-linked list */
+    /* Internal data */
+    struct atom_timer *next_timer;      /* Next timer in doubly-linked list */
+    struct atom_timer *next_timer_call; /* Next timer that should be called */
 
 } ATOM_TIMER;
 

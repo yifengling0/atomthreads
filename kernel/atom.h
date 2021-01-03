@@ -90,6 +90,9 @@ extern uint8_t atomOSStarted;
 #define TRUE                    1
 #define FALSE                   0
 
+#define OK                      0
+#define NG                     -1
+
 /* Error values */
 
 #define ATOM_OK                 0

@@ -52,7 +52,7 @@
  * In this case, the idle stack is allocated on the BSS via the
  * idle_thread_stack[] byte array.
  */
-#define IDLE_STACK_SIZE_BYTES       128
+#define IDLE_STACK_SIZE_BYTES       64
 
 
 /*
@@ -78,7 +78,7 @@
  * future as the codebase changes but for the time being is enough to
  * cope with all of the automated tests.
  */
-#define MAIN_STACK_SIZE_BYTES       384
+#define MAIN_STACK_SIZE_BYTES       128
 
 
 /*
@@ -201,7 +201,7 @@ static void main_thread_func (uint32_t param)
     }
 
     /* Put a message out on the UART */
-    printf ("Go\n");
+    DebugPrint ("Go\n");
 
     /* Start test. All tests use the same start API. */
     test_status = test_start();
@@ -218,13 +218,13 @@ static void main_thread_func (uint32_t param)
             /* Check the thread did not use up to the end of stack */
             if (free_bytes == 0)
             {
-                printf ("Main stack overflow\n");
+                DebugPrint ("Main stack overflow\n");
                 test_status++;
             }
 
             /* Log the stack usage */
 #ifdef TESTS_LOG_STACK_USAGE
-            printf ("MainUse:%d\n", (int)used_bytes);
+            DebugPrintValue ("MainUse:", (int)used_bytes, 10, 0, 1);
 #endif
         }
 
@@ -234,11 +234,11 @@ static void main_thread_func (uint32_t param)
     /* Log final status */
     if (test_status == 0)
     {
-        printf ("Pass\n");
+        DebugPrint ("Pass\n");
     }
     else
     {
-        printf ("Fail(%d)\n", (int)test_status);
+        DebugPrint ("Fail(%d)\n");
     }
 
     /* Flash LED once per second if passed, very quickly if failed */

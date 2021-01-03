@@ -40,7 +40,7 @@ aobjs :=
 
 # set default board if none is given
 ifeq ($(BOARD),)
-    BOARD = nucleo-f103rb
+    BOARD = nucleo-l031k6
 endif
 
 include $(src_dir)/boards/$(BOARD)/Makefile.include
@@ -75,7 +75,12 @@ LDSCRIPT    ?= linker/$(TARGET).ld
 board_dir=$(src_dir)/boards/$(BOARD)
 common_dir=$(src_dir)/common
 kernel_dir=$(src_dir)/../../kernel
+extra_dir=$(src_dir)/../../extra
 tests_dir=$(src_dir)/../../tests
+com_dir=$(src_dir)/../../com
+lib_dir=$(src_dir)/../../lib
+drv_dir=$(src_dir)/../../drv
+
 
 # Check if user wants to use external opencm3 lib or if we have to build
 # it ourselves
@@ -99,6 +104,9 @@ objs += atommutex.o
 objs += atomtimer.o 
 objs += atomqueue.o
 
+# extra object files
+objs += event.o
+
 # Collection of built objects (excluding test applications)
 build_objs  = $(foreach obj,$(objs),$(build_dir)/$(obj))
 
@@ -114,9 +122,9 @@ SCRIPT_DIR  = $(OPENCM3_DIR)/scripts
 
 # GCC flags
 CFLAGS       =  -Os -g
-CFLAGS      += -Wall -Werror
+CFLAGS      += -Wall #-Werror
 CFLAGS      += -Wredundant-decls -Wstrict-prototypes
-CFLAGS      += -fno-common -ffunction-sections -fdata-sections
+CFLAGS      += -fno-common -ffunction-sections -fdata-sections -fno-strict-aliasing
 
 # Enable stack-checking (disable if not required)
 ifeq ($(STACK_CHECK),true)
@@ -125,9 +133,9 @@ endif
 
 # C & C++ preprocessor common flags
 CPPFLAGS    += -MD
-CPPFLAGS    += -Wall -Wundef -Werror
+CPPFLAGS    += -Wall -Wundef #-Werror
 CPPFLAGS    += -I$(INCLUDE_DIR) $(DEFS)
-CPPFLAGS    += -I$(board_dir) -I$(common_dir) -I$(src_dir) -I$(kernel_dir) -I$(tests_dir)
+CPPFLAGS    += -I$(board_dir) -I$(common_dir) -I$(src_dir) -I$(kernel_dir) -I$(extra_dir) -I$(tests_dir) -I$(com_dir) -I$(drv_dir) -I$(lib_dir)
 
 # Assembler flags
 ASFLAGS     += -D__ASSEMBLY__ 
@@ -315,7 +323,29 @@ $(build_dir)/%.o: $(kernel_dir)/%.c Makefile $(board_dir)/Makefile.include
 	$(if $(Q), @echo " (CC)        $(subst $(build_dir)/,,$@)")
 	$(Q)$(CC) $(SPECS) $(CFLAGS) $(CPPFLAGS) $(ARCH_FLAGS) -I`dirname $<` -c $< -o $@
 
+$(build_dir)/%.o: $(extra_dir)/%.c Makefile $(board_dir)/Makefile.include
+	$(Q)mkdir -p `dirname $@`
+	$(if $(Q), @echo " (CC)        $(subst $(build_dir)/,,$@)")
+	$(Q)$(CC) $(SPECS) $(CFLAGS) $(CPPFLAGS) $(ARCH_FLAGS) -I`dirname $<` -c $< -o $@
+
 $(build_dir)/%.o: $(tests_dir)/%.c Makefile $(board_dir)/Makefile.include
+	$(Q)mkdir -p `dirname $@`
+	$(if $(Q), @echo " (CC)        $(subst $(build_dir)/,,$@)")
+	$(Q)$(CC) $(SPECS) $(CFLAGS) $(CPPFLAGS) $(ARCH_FLAGS) -I`dirname $<` -c $< -o $@
+
+
+$(build_dir)/%.o: $(com_dir)/%.c Makefile $(board_dir)/Makefile.include
+	$(Q)mkdir -p `dirname $@`
+	$(if $(Q), @echo " (CC)        $(subst $(build_dir)/,,$@)")
+	$(Q)$(CC) $(SPECS) $(CFLAGS) $(CPPFLAGS) $(ARCH_FLAGS) -I`dirname $<` -c $< -o $@
+
+
+$(build_dir)/%.o: $(lib_dir)/%.c Makefile $(board_dir)/Makefile.include
+	$(Q)mkdir -p `dirname $@`
+	$(if $(Q), @echo " (CC)        $(subst $(build_dir)/,,$@)")
+	$(Q)$(CC) $(SPECS) $(CFLAGS) $(CPPFLAGS) $(ARCH_FLAGS) -I`dirname $<` -c $< -o $@
+
+$(build_dir)/%.o: $(drv_dir)/%.c Makefile $(board_dir)/Makefile.include
 	$(Q)mkdir -p `dirname $@`
 	$(if $(Q), @echo " (CC)        $(subst $(build_dir)/,,$@)")
 	$(Q)$(CC) $(SPECS) $(CFLAGS) $(CPPFLAGS) $(ARCH_FLAGS) -I`dirname $<` -c $< -o $@

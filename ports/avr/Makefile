@@ -10,6 +10,7 @@
 
 # Location of build tools and atomthreads sources
 KERNEL_DIR=../../kernel
+EXTRA_DIR=../../extra
 TESTS_DIR=../../tests
 CC=/usr/bin/avr-gcc
 OBJCOPY=/usr/bin/avr-objcopy
@@ -42,8 +43,10 @@ APP_ASM_OBJECTS = atomport-asm.o
 # Kernel object files
 KERNEL_OBJECTS = atomkernel.o atomsem.o atommutex.o atomtimer.o atomqueue.o
 
+EXTRA_OBJECTS = event.o
+
 # Collection of built objects (excluding test applications)
-ALL_OBJECTS = $(APP_OBJECTS) $(APP_ASM_OBJECTS) $(KERNEL_OBJECTS)
+ALL_OBJECTS = $(APP_OBJECTS) $(APP_ASM_OBJECTS) $(KERNEL_OBJECTS) $(EXTRA_OBJECTS)
 BUILT_OBJECTS = $(patsubst %,$(BUILD_DIR)/%,$(ALL_OBJECTS))
 
 # Test object files (dealt with separately as only one per application build)
@@ -87,28 +90,32 @@ $(TEST_HEXS): %.hex: %.elf
 	$(OBJCOPY) -j .text -j .data -O ihex $(BUILD_DIR)/$< $(BUILD_DIR)/$@
 
 # Test ELF files (one application build for each test)
-$(TEST_ELFS): %.elf: %.o $(KERNEL_OBJECTS) $(APP_OBJECTS) $(APP_ASM_OBJECTS)
+$(TEST_ELFS): %.elf: %.o $(KERNEL_OBJECTS) $(APP_OBJECTS) $(APP_ASM_OBJECTS) $(EXTRA_OBJECTS)
 	$(CC) $(CFLAGS) $(BUILD_DIR)/$(notdir $<) $(BUILT_OBJECTS) --output $(BUILD_DIR)/$@ -Wl,-Map,$(BUILD_DIR)/$(basename $@).map
 
 # Kernel objects builder
 $(KERNEL_OBJECTS): %.o: $(KERNEL_DIR)/%.c
 	$(CC) -c $(CFLAGS) -I. $< -o $(BUILD_DIR)/$(notdir $@)
 
+# os extra objects builder
+$(EXTRA_OBJECTS): %.o: $(EXTRA_DIR)/%.c
+	$(CC) -c $(CFLAGS) -I. -I$(KERNEL_DIR) $< -o $(BUILD_DIR)/$(notdir $@)
+
 # Test objects builder
 $(TEST_OBJECTS): %.o: $(TESTS_DIR)/%.c
-	$(CC) -c $(CFLAGS) -I. -I$(KERNEL_DIR) $< -o $(BUILD_DIR)/$(notdir $@)
+	$(CC) -c $(CFLAGS) -I. -I$(KERNEL_DIR) -I$(EXTRA_DIR) $< -o $(BUILD_DIR)/$(notdir $@)
 
 # Application C objects builder
 $(APP_OBJECTS): %.o: ./%.c
-	$(CC) -c $(CFLAGS) -I. -I$(KERNEL_DIR) -I$(TESTS_DIR) $< -o $(BUILD_DIR)/$(notdir $@)
+	$(CC) -c $(CFLAGS) -I. -I$(KERNEL_DIR) -I$(EXTRA_DIR) -I$(TESTS_DIR) $< -o $(BUILD_DIR)/$(notdir $@)
 
 # Application asm objects builder
 $(APP_ASM_OBJECTS): %.o: ./%.s
-	$(CC) -c $(CFLAGS) -x assembler-with-cpp -I. -I$(KERNEL_DIR) $< -o $(BUILD_DIR)/$(notdir $@)
+	$(CC) -c $(CFLAGS) -x assembler-with-cpp -I. -I$(KERNEL_DIR) -I$(EXTRA_DIR) $< -o $(BUILD_DIR)/$(notdir $@)
 
 # .lst file builder
 %.lst: %.c
-	$(CC) $(CFLAGS) -I. -I$(KERNEL_DIR) -I$(TESTS_DIR) -Wa,-al $< > $@
+	$(CC) $(CFLAGS) -I. -I$(KERNEL_DIR) -I$(EXTRA_DIR) -I$(TESTS_DIR) -Wa,-al $< > $@
 
 # Clean
 clean:

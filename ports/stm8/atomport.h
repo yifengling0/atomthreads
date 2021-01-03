@@ -31,8 +31,7 @@
 #ifndef __ATOM_PORT_H
 #define __ATOM_PORT_H
 
-
-#include "stm8s_type.h"
+//#include "stm8s_type.h"
 
 #if defined(__IAR_SYSTEMS_ICC__)
 #include "intrinsics.h"
@@ -57,8 +56,12 @@
 #define uint16_t u16
 #define uint32_t u32
 #else
-#include <stdint.h>
+//#include <stdint.h>
+#include "stm8s.h"
 #endif
+
+#include "config.h"
+
 #define POINTER  void *
 
 /* Size of each stack entry / stack alignment size (8 bits on STM8) */

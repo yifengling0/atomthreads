@@ -396,7 +396,6 @@ uint8_t atomTimerDelay (uint32_t ticks)
     return (status);
 }
 
-
 /**
  * \b atomTimerCallbacks
  *
@@ -420,7 +419,7 @@ static void atomTimerCallbacks (void)
     {
         /* Save the next timer in the list (we adjust next_ptr for callbacks) */
         saved_next_ptr = next_ptr->next_timer;
- 
+
         /* Is this entry due? */
         if (--(next_ptr->cb_ticks) == 0)
         {
@@ -442,23 +441,24 @@ static void atomTimerCallbacks (void)
              * now in case they want to register new timers and hence walk
              * the timer list.
              *
-             * We reuse the ATOM_TIMER structure's next_ptr to maintain the
+             * We use the ATOM_TIMER structure's next_timer_call to maintain the
              * callback list.
              */
             if (callback_list_head == NULL)
             {
-                /* First callback request in the list */ 
+                /* First callback request in the list */
                 callback_list_head = callback_list_tail = next_ptr;
+                callback_list_head->next_timer_call = NULL;
             }
             else
             {
                 /* Add callback request to the list tail */
-                callback_list_tail->next_timer = next_ptr;
-                callback_list_tail = callback_list_tail->next_timer;
+                callback_list_tail->next_timer_call = next_ptr;
+                callback_list_tail = next_ptr;
             }
 
             /* Mark this timer as the end of the callback list */
-            next_ptr->next_timer = NULL;
+            next_ptr->next_timer_call = NULL;
 
             /* Do not update prev_ptr, we have just removed this one */
 
@@ -488,12 +488,6 @@ static void atomTimerCallbacks (void)
         next_ptr = callback_list_head;
         while (next_ptr)
         {
-            /*
-             *  Save the next timer in the list (in case the callback
-             *  modifies the list by registering again.
-             */
-            saved_next_ptr = next_ptr->next_timer;
-
             /* Call the registered callback */
             if (next_ptr->cb_func)
             {
@@ -501,7 +495,7 @@ static void atomTimerCallbacks (void)
             }
 
             /* Move on to the next callback in the list */
-            next_ptr = saved_next_ptr;
+            next_ptr = next_ptr->next_timer_call;
         }
     }
 

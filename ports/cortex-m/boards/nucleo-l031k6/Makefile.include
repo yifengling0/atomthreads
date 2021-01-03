@@ -1,0 +1,38 @@
+TARGET          ?= stm32l031k6
+
+LIBNAME         ?= opencm3_stm32l0
+DEFS            ?= -DSTM32L0
+DEFS            ?= -DUSE_KASSERT
+DEFS            += -DSTD_CON=USART2
+DEFS            += -DMST_SIZE=0x400
+
+FP_FLAGS        ?= -msoft-float
+ARCH_FLAGS      ?= -mthumb -mcpu=cortex-m0
+
+OOCD            ?= openocd
+OOCD_INTERFACE  ?= stlink-v2-1
+OOCD_BOARD      ?= st_nucleo_l0
+
+objs            += board_setup.o
+objs            += l031k6_usart.o
+objs            += stubs.o #stm32_con.o
+
+#lib
+objs            +=numberical/numberical.o
+objs            +=buffer/ringbuffer.o
+#objs            +=alloc/allocator.o
+
+#drv
+objs            +=iosdrv/iosdrv.o
+objs            +=sio/sio.o
+objs            +=adc/adc.o
+objs            +=pin/pin.o
+
+#com
+objs            +=console/console.o
+objs            +=debug/debug.o
+objs            +=syslog/syslog.o
+objs            +=kassert/kassert.o
+
+
+# aobjs           += helloworld.o

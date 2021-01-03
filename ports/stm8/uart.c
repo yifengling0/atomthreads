@@ -5,7 +5,8 @@
 #include "atom.h"
 #include "atommutex.h"
 #include "uart.h"
-
+#include "stm8s_uart1.h"
+#include <string.h>
 
 /*
  * Semaphore for single-threaded access to UART device
@@ -24,9 +25,9 @@ int uart_init(uint32_t baudrate)
    * Set up UART2 for putting out debug messages.
    * This the UART used on STM8S Discovery, change if required.
    */
-  UART2_DeInit();
-  UART2_Init (baudrate, UART2_WORDLENGTH_8D, UART2_STOPBITS_1, UART2_PARITY_NO,
-              UART2_SYNCMODE_CLOCK_DISABLE, UART2_MODE_TXRX_ENABLE);
+  UART1_DeInit();
+  UART1_Init (baudrate, UART1_WORDLENGTH_8D, UART1_STOPBITS_1, UART1_PARITY_NO,
+              UART1_SYNCMODE_CLOCK_DISABLE, UART1_MODE_TXRX_ENABLE);
 
   /* Create a mutex for single-threaded putchar() access */
   if (atomMutexCreate (&uart_mutex) != ATOM_OK)
@@ -41,7 +42,6 @@ int uart_init(uint32_t baudrate)
   /* Finished */
   return (status);
 }
-
 
 /**
  * \b uart_putchar
@@ -62,10 +62,10 @@ char uart_putchar (char c)
             putchar('\r');
 
         /* Write a character to the UART2 */
-        UART2_SendData8(c);
+        UART1_SendData8(c);
       
         /* Loop until the end of transmission */
-        while (UART2_GetFlagStatus(UART2_FLAG_TXE) == RESET)
+        while (UART1_GetFlagStatus(UART1_FLAG_TXE) == RESET)
             ;
 
         /* Return mutex access */
@@ -76,6 +76,15 @@ char uart_putchar (char c)
     return (c);
 }
 
+char uart_getchar ()
+{
+    return (char)UART1_ReceiveData8();
+}
+
+int uart_have_data()
+{
+    return UART1_GetFlagStatus(UART1_FLAG_RXNE);
+} 
 
 /* COSMIC: Requires putchar() routine to override stdio */
 #if defined(__CSMC__)

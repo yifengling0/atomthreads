@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="atomkernel.c">
+      <Filter>kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="atomport.c" />
+    <ClCompile Include="..\..\..\tests\kern1.c">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="board_setup.c" />
+    <ClCompile Include="atomtimer.c">
+      <Filter>kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="tests-main.c" />
+    <ClCompile Include="..\..\..\extra\event.c">
+      <Filter>extra</Filter>
+    </ClCompile>
+    <ClCompile Include="atomqueue.c">
+      <Filter>kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="_threadmanager.cpp">
+      <Filter>kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="atommutex.cpp">
+      <Filter>kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\buffer\ringbuffer.c">
+      <Filter>lib\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\com\console\console.c">
+      <Filter>com\console</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\com\debug\debug.c">
+      <Filter>com\debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\alloc\allocator.c">
+      <Filter>lib\alloc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\numberical.c">
+      <Filter>lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\drv\iosdrv.c">
+      <Filter>drv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\drv\sio\sio.c">
+      <Filter>drv\sio</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="kernel">
+      <UniqueIdentifier>{6fd1a7eb-00d1-485c-af30-759bde2b35c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests">
+      <UniqueIdentifier>{8450ef34-202b-4a95-a076-cb1fba9f3636}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extra">
+      <UniqueIdentifier>{2b6d6de0-75f9-4c11-ac11-345f89dbf932}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib">
+      <UniqueIdentifier>{ef26a968-7c66-48aa-85af-621a53a2ef7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\buffer">
+      <UniqueIdentifier>{36f77bee-a33e-4a09-a244-463c9805ee31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="com">
+      <UniqueIdentifier>{35ba527c-6d42-440e-bc10-597ffba2d902}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="com\console">
+      <UniqueIdentifier>{5bbbe1a9-ff39-49d3-bd36-80d082796803}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="com\debug">
+      <UniqueIdentifier>{ac111750-c8ce-4858-bb14-7177f13943f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\alloc">
+      <UniqueIdentifier>{d93a0556-5d4c-4453-a09d-8384670ed13c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="drv">
+      <UniqueIdentifier>{cd18b6b8-8f45-47ca-af71-11a197aeb047}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="drv\sio">
+      <UniqueIdentifier>{1606122a-1cee-4528-8c8e-e7dbd03c5d92}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="atomport.h" />
+    <ClInclude Include="win32port.h" />
+    <ClInclude Include="atomport-tests.h" />
+    <ClInclude Include="..\..\..\extra\event.h">
+      <Filter>extra</Filter>
+    </ClInclude>
+    <ClInclude Include="_threadmanager.h">
+      <Filter>kernel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\buffer\ringbuffer.h">
+      <Filter>lib\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\queue.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\com\console\console.h">
+      <Filter>com\console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\com\debug\debug.h">
+      <Filter>com\debug</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\alloc\allocator.h">
+      <Filter>lib\alloc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\mem.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\numberical.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\com\debug\debug_port.h">
+      <Filter>com\debug</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\drv\iosdrv.h">
+      <Filter>drv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\drv\sio.h">
+      <Filter>drv</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
