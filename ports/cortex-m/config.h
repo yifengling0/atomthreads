@@ -31,6 +31,6 @@
 #define __ATOM_CONFIG_H
 
 // console task stack size for cortex-m
-#define CONSOLE_STACK_SIZE_BYTES (192)
+#define CONSOLE_STACK_SIZE_BYTES (256)
 
 #endif
